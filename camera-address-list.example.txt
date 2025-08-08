@@ -1,0 +1,1 @@
+rtsp://{admin}:{password}@{cam_ip}:{port}[/onvif1]
