@@ -8,3 +8,6 @@ def extract_ip_port(text):
     if match:
         return match.group(1)
     return None
+
+def export_ip_only(cam_ip):
+    return extract_ip_port(cam_ip).split(':')[0]

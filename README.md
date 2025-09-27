@@ -39,9 +39,9 @@ pip install python-dotenv
 
 ### Usage
 
-Run the main script to start recording all cameras in parallel:
+Run the app script to start recording all cameras in parallel:
 
-python main.py
+python app.py
 
 Each camera will record segmented videos and logs will be saved under the specified directories.
 ### Logging

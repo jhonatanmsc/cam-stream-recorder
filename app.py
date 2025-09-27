@@ -5,10 +5,11 @@ from multiprocessing import Process
 
 from log_entry import Logger
 from settings import segment_time, RECORDS_DIR, max_attempts
-from utils import extract_ip_port
+from utils import export_ip_only
 
 
 def record_camera(cam_ip):
+    ip_only = export_ip_only(cam_ip)
     ffmpeg_command = [
         'ffmpeg',
         '-i', cam_ip,
@@ -17,11 +18,11 @@ def record_camera(cam_ip):
         '-f', 'segment',
         '-segment_time', str(segment_time),
         '-strftime', '1',
-        os.path.join(RECORDS_DIR, f'{cam_ip}_%Y-%m-%d_%H:%M:%S.avi')
+        os.path.join(RECORDS_DIR, f'{ip_only}_%Y-%m-%d_%H-%M-%S.mkv')
     ]
-    print(' '.join(ffmpeg_command))
 
-    log = Logger(cam_ip)
+    log = Logger(ip_only)
+    log.write("command: " + ' '.join(ffmpeg_command))
 
     attempt_counter = 0
     while attempt_counter < max_attempts:
@@ -53,8 +54,7 @@ def record_camera(cam_ip):
 def main():
     cam_ip_list = []
     with open('camera-address-list.txt', 'r') as file:
-        lines = file.readlines()
-        cam_ip_list = [extract_ip_port(line) for line in lines]
+        cam_ip_list = [ip.strip() for ip in file.readlines()]
 
     processes = []
     for cam_ip in cam_ip_list:
